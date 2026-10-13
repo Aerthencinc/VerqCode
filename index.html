@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#090b16">
+<title>VerqCode — Aerthenc</title>
+<style>
+:root{color-scheme:dark;--bg:#090b16;--panel:#111528;--panel2:#171c33;--line:#272e4b;--text:#f4f6ff;--muted:#a3abc8;--blue:#5c8dff;--purple:#a66cff;--good:#5fe0b0;--danger:#ff7285;--radius:22px}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 15% -10%,#222653 0,transparent 42%),radial-gradient(ellipse at 100% 30%,#21173e 0,transparent 35%),var(--bg);color:var(--text);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;min-height:100vh}
+button,input,textarea,select{font:inherit}button{cursor:pointer;color:inherit;border:0}button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+.app{max-width:760px;margin:auto;padding:calc(18px + env(safe-area-inset-top)) 17px calc(95px + env(safe-area-inset-bottom))}
+header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}.brand{display:flex;gap:11px;align-items:center}.logo{width:46px;height:46px;border-radius:15px;background:linear-gradient(135deg,var(--blue),var(--purple));display:grid;place-items:center;box-shadow:0 8px 28px #5c8dff35}.logo svg{width:27px;height:27px}.brand h1{font-size:20px;letter-spacing:-.6px;margin:0}.brand p{margin:1px 0 0;color:var(--muted);font-size:11px;letter-spacing:1.5px;text-transform:uppercase}.icon-btn{width:43px;height:43px;border-radius:14px;background:#ffffff0b;border:1px solid var(--line);font-size:19px}
+.hero{padding:23px 0 19px}.eyebrow{color:#9cb6ff;text-transform:uppercase;letter-spacing:2px;font-size:11px;font-weight:750}.hero h2{font-size:clamp(28px,7vw,42px);letter-spacing:-1.5px;line-height:1.08;margin:10px 0}.hero h2 span{background:linear-gradient(90deg,#82aaff,#c49bff);color:transparent;background-clip:text}.hero p{color:var(--muted);max-width:440px;margin:0}
+.card{background:linear-gradient(145deg,#151a30f2,#101425f2);border:1px solid var(--line);border-radius:var(--radius);padding:19px;margin:14px 0;box-shadow:0 14px 45px #00000017}.scan-card{position:relative;overflow:hidden;background:linear-gradient(135deg,#17264a,#21183d);border-color:#3a4c7b;padding:21px}.scan-card:after{content:"";position:absolute;width:170px;height:170px;border-radius:50%;background:#648bff12;right:-45px;top:-65px}.scan-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.scan-head h3{margin:0 0 5px;font-size:20px}.scan-head p{margin:0;color:#c2cbe6;font-size:13px}.scan-symbol{font-size:28px;background:#ffffff10;border:1px solid #ffffff19;border-radius:15px;width:52px;height:52px;display:grid;place-items:center}.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:19px}.btn{padding:13px 15px;border-radius:14px;font-weight:700;transition:transform .16s,filter .16s;background:#ffffff0b;border:1px solid var(--line)}.btn:active,.tile:active{transform:scale(.98)}.primary{background:linear-gradient(105deg,var(--blue),#7869f8);border:0;color:white;box-shadow:0 7px 20px #5c8dff28}.soft{background:#ffffff0d;border-color:#ffffff20}.section-head{display:flex;align-items:center;justify-content:space-between;margin:25px 2px 12px}.section-head h3{margin:0;font-size:17px}.section-head span{font-size:12px;color:var(--muted)}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px}.tile{text-align:left;min-height:137px;padding:17px;border:1px solid var(--line);border-radius:19px;background:linear-gradient(145deg,#151a2d,#111425);transition:transform .16s}.tile .tile-icon{display:grid;place-items:center;width:42px;height:42px;border-radius:14px;background:#5c8dff19;font-size:21px;margin-bottom:15px}.tile h4{margin:0 0 4px;font-size:15px}.tile p{margin:0;color:var(--muted);font-size:12px}
+.view{display:none}.view.active{display:block;animation:fade .25s ease}@keyframes fade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+label{display:block;color:#c8cee5;font-size:13px;margin:14px 0 7px}input,textarea,select{width:100%;border:1px solid var(--line);background:#0b0e1b;color:var(--text);border-radius:13px;padding:13px 14px;min-width:0}textarea{min-height:95px;resize:vertical}.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.type-pills{display:flex;gap:7px;flex-wrap:wrap;margin:14px 0}.pill{padding:9px 12px;border-radius:999px;border:1px solid var(--line);background:#ffffff08;color:var(--muted);font-size:12px}.pill.active{background:#5c8dff24;border-color:#5c8dff;color:#dce6ff}
+.qr-preview{min-height:220px;display:grid;place-items:center;background:#0b0e1b;border:1px dashed #343c5c;border-radius:18px;margin:17px 0;padding:15px}.qr-preview img{max-width:100%;width:220px;height:220px;object-fit:contain;background:white;border-radius:8px;padding:7px}.muted{color:var(--muted)}.small{font-size:12px}.row{display:flex;gap:9px;flex-wrap:wrap}.row .btn{flex:1;min-width:115px}
+.result-box{overflow-wrap:anywhere;background:#0b0e1b;border:1px solid var(--line);padding:15px;border-radius:14px;margin:13px 0}.tag{display:inline-block;background:#5c8dff1c;color:#a9c0ff;border-radius:99px;padding:5px 9px;font-size:11px;margin-bottom:7px}
+.history-item{display:flex;gap:12px;align-items:flex-start;padding:14px 0;border-bottom:1px solid #ffffff0c}.history-item:last-child{border:0}.history-icon{width:40px;height:40px;border-radius:13px;background:#ffffff0a;display:grid;place-items:center;flex-shrink:0}.history-content{min-width:0;flex:1}.history-content strong{display:block;overflow-wrap:anywhere;font-size:13px}.history-content small{color:var(--muted)}.history-actions{display:flex;gap:6px;margin-top:8px}.mini{padding:6px 9px;background:#ffffff0b;border:1px solid var(--line);border-radius:9px;font-size:11px}
+.camera-wrap{position:relative;overflow:hidden;border-radius:20px;background:#03040a;min-height:250px;display:grid;place-items:center;margin:15px 0}.camera-wrap video{width:100%;max-height:62vh;object-fit:cover}.scan-frame{position:absolute;width:min(64vw,240px);height:min(64vw,240px);border:2px solid #7eabff;border-radius:22px;box-shadow:0 0 0 100vmax #0006}.scan-frame:after{content:"";position:absolute;left:8%;right:8%;height:2px;background:#83b3ff;box-shadow:0 0 12px #83b3ff;animation:scanline 2s ease-in-out infinite alternate}@keyframes scanline{from{top:12%}to{top:88%}}
+.empty{text-align:center;padding:30px 12px;color:var(--muted)}.empty .big{font-size:36px;margin-bottom:10px}.setting-row{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:15px 0;border-bottom:1px solid #ffffff0c}.setting-row:last-child{border:0}.setting-row p{margin:3px 0 0;color:var(--muted);font-size:12px}.switch{width:45px;height:26px;accent-color:var(--blue)}
+.bottom-nav{position:fixed;z-index:10;bottom:0;left:0;right:0;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:#0b0d19eF;backdrop-filter:blur(18px);border-top:1px solid #ffffff12;display:flex;justify-content:center}.nav-inner{display:grid;grid-template-columns:repeat(4,1fr);width:min(100%,620px);gap:6px}.nav-btn{background:transparent;color:#8f98b7;border-radius:13px;padding:8px 4px;font-size:10px;display:grid;gap:4px;justify-items:center}.nav-btn b{font-size:19px;font-weight:500}.nav-btn.active{background:#5c8dff18;color:#b9ceff}
+.toast{position:fixed;z-index:30;bottom:95px;left:50%;transform:translate(-50%,12px);opacity:0;pointer-events:none;background:#202943;border:1px solid #3a4a70;padding:11px 16px;border-radius:12px;box-shadow:0 8px 30px #0005;transition:.22s;max-width:90%;font-size:13px}.toast.show{opacity:1;transform:translate(-50%,0)}
+a{color:#a9c0ff}footer{text-align:center;color:#6f7896;font-size:11px;padding:25px 0 4px}
+@media(min-width:620px){.tiles{grid-template-columns:repeat(4,1fr)}.tile{min-height:155px}.hero{padding-top:30px}.app{padding-left:25px;padding-right:25px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div class="brand">
+    <div class="logo" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="white" stroke-width="3"><path d="M4 13V4h9M19 4h9v9M28 19v9h-9M13 28H4v-9"/><path d="M9 9h4v4H9zM19 9h4v4h-4zM9 19h4v4H9zM19 19h4v4h-4z" fill="white" stroke="none"/></svg></div>
+    <div><h1>VerqCode</h1><p>Powered by Aerthenc</p></div>
+  </div>
+  <button class="icon-btn" id="settingsTop" aria-label="Ayarlar">⚙</button>
+</header>
+
+<main>
+<section class="view active" id="homeView">
+  <div class="hero"><div class="eyebrow">Scan Smart. Create Freely.</div><h2>Her kodun ardında<br><span>bir keşif var.</span></h2><p>QR kodlarını saniyeler içinde tara, oluştur ve güvenle yönet.</p></div>
+  <div class="card scan-card">
+    <div class="scan-head"><div><h3>Hemen taramaya başla</h3><p>Kameranı bir QR koduna doğrult.</p></div><div class="scan-symbol">⌗</div></div>
+    <div class="actions"><button class="btn primary" data-goto="scan">▦ &nbsp; QR Tara</button><button class="btn soft" id="galleryMain">▧ &nbsp; Galeriden Tara</button></div>
+  </div>
+  <div class="section-head"><h3>Hızlı erişim</h3><span>Her şey tek yerde</span></div>
+  <div class="tiles">
+    <button class="tile" data-goto="scan"><span class="tile-icon">▦</span><h4>QR Tara</h4><p>Kamera ile anında oku</p></button>
+    <button class="tile" id="galleryTile"><span class="tile-icon">▧</span><h4>Galeriden Tara</h4><p>Görselden kodu çöz</p></button>
+    <button class="tile" data-goto="create"><span class="tile-icon">✳</span><h4>QR Oluştur</h4><p>Kendi kodunu tasarla</p></button>
+    <button class="tile" data-goto="history"><span class="tile-icon">◷</span><h4>Geçmiş</h4><p>Önceki sonuçlarına bak</p></button>
+  </div>
+  <footer>VerqCode · Aerthenc © <span id="year"></span></footer>
+</section>
+
+<section class="view" id="scanView">
+  <div class="section-head"><h3>QR kod tara</h3><span>Hızlı · Yerel</span></div>
+  <p class="muted">Kamerayı kodun üzerine tut. İzin yalnızca taramayı başlattığında istenir.</p>
+  <div class="camera-wrap" id="cameraWrap"><div class="empty"><div class="big">▦</div><div>Kamera henüz başlatılmadı</div><p class="small">İyi ışık ve net görüntü daha hızlı sonuç verir.</p></div></div>
+  <div class="row"><button class="btn primary" id="startCamera">Kamerayı başlat</button><button class="btn" id="stopCamera">Durdur</button></div>
+  <div class="form-row"><button class="btn" id="toggleFlash">⚡ Flaş aç / kapat</button><button class="btn" id="switchCamera">↻ Kamera değiştir</button></div>
+  <p class="small muted">Kamera özellikleri cihaz ve tarayıcı desteğine bağlıdır. Çalışmazsa galeriden taramayı deneyebilirsin.</p>
+  <input type="file" id="galleryInput" accept="image/*" hidden>
+  <button class="btn soft" style="width:100%;margin-top:10px" id="galleryScan">▧ Görsel seçerek tara</button>
+  <div id="scanResult"></div>
+</section>
+
+<section class="view" id="createView">
+  <div class="section-head"><h3>QR kod oluştur</h3><span>Senin tasarımın</span></div>
+  <label>İçerik türü</label>
+  <div class="type-pills" id="typePills">
+    <button class="pill active" data-type="url">🔗 Bağlantı</button><button class="pill" data-type="text">T Metin</button><button class="pill" data-type="phone">☎ Telefon</button><button class="pill" data-type="email">✉ E-posta</button><button class="pill" data-type="wifi">⌁ Wi-Fi</button><button class="pill" data-type="vcard">♙ Kişi</button>
+  </div>
+  <div id="fields"></div>
+  <div class="form-row"><div><label for="qrColor">QR rengi</label><input type="color" id="qrColor" value="#111827" style="height:48px;padding:5px"></div><div><label for="bgColor">Arka plan</label><input type="color" id="bgColor" value="#ffffff" style="height:48px;padding:5px"></div></div>
+  <div class="qr-preview" id="qrPreview"><span class="muted">Önizleme burada görünecek</span></div>
+  <div class="row"><button class="btn primary" id="downloadQR">PNG kaydet</button><button class="btn" id="shareQR">Paylaş</button></div>
+  <p class="small muted">QR görseli oluşturmak için internet bağlantısı ve QR kütüphanesi gerekir. İçeriğin gizliliği için hassas bilgileri kodlamadan önce dikkatli ol.</p>
+</section>
+
+<section class="view" id="historyView">
+  <div class="section-head"><h3>Tarama geçmişi</h3><button class="mini" id="clearHistory">Tümünü temizle</button></div>
+  <div class="card" id="historyList"></div>
+</section>
+
+<section class="view" id="settingsView">
+  <div class="section-head"><h3>Ayarlar</h3><span>VerqCode</span></div>
+  <div class="card">
+    <div class="setting-row"><div><strong>Koyu tema</strong><p>VerqCode karanlık görünümü</p></div><input class="switch" type="checkbox" id="darkToggle" checked aria-label="Koyu tema"></div>
+    <div class="setting-row"><div><strong>Titreşimli geri bildirim</strong><p>Desteklenen cihazlarda tarama titreşimi</p></div><input class="switch" type="checkbox" id="vibrateToggle" checked aria-label="Titreşim"></div>
+    <div class="setting-row"><div><strong>Geçmişi temizle</strong><p>Bu cihazda saklanan kayıtları sil</p></div><button class="mini" id="clearHistory2">Temizle</button></div>
+    <div class="setting-row"><div><strong>Gizlilik</strong><p>Tarama geçmişi bu tarayıcıda saklanır.</p></div><span>🔒</span></div>
+    <div class="setting-row"><div><strong>Uygulama hakkında</strong><p>VerqCode · Scan Smart. Create Freely.</p></div><span>ⓘ</span></div>
+    <div class="setting-row"><div><strong>Geliştirici</strong><p>Aerthenc</p></div><span>✦</span></div>
+    <div class="setting-row"><div><strong>Sürüm</strong><p>Web sürümü 1.0.0</p></div><span class="tag">1.0.0</span></div>
+  </div>
+</section>
+
+<section class="view" id="resultView">
+  <div class="section-head"><h3>QR sonucu</h3><span>Okunan içerik</span></div>
+  <div class="card" id="resultContent"></div>
+  <button class="btn" style="width:100%" data-goto="scan">‹ Yeni tarama</button>
+</section>
+</main>
+</div>
+
+<nav class="bottom-nav" aria-label="Ana gezinme"><div class="nav-inner">
+<button class="nav-btn active" data-goto="home"><b>⌂</b>Ana Sayfa</button>
+<button class="nav-btn" data-goto="scan"><b>▦</b>Tara</button>
+<button class="nav-btn" data-goto="create"><b>✳</b>Oluştur</button>
+<button class="nav-btn" data-goto="history"><b>◷</b>Geçmiş</button>
+</div></nav>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
+<script>
+(() => {
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const views={home:'homeView',scan:'scanView',create:'createView',history:'historyView',settings:'settingsView',result:'resultView'};
+let currentType='url', currentQR='', currentDataURL='', stream=null, detector=null, scanLoop=null, facing='environment', track=null, flashOn=false;
+let historyData=[]; try{historyData=JSON.parse(localStorage.getItem('verqcode-history')||'[]')}catch{}
+let vibrate=true, dark=true;
+$('#year').textContent=new Date().getFullYear();
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove('show'),2400)}
+function go(name){stopCamera();Object.values(views).forEach(id=>$('#'+id).classList.remove('active'));$('#'+views[name]).classList.add('active');$$('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.goto===name));if(name==='history')renderHistory();if(name==='create')renderFields();window.scrollTo({top:0,behavior:'smooth'})}
+$$('[data-goto]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.goto)));
+$('#settingsTop').onclick=()=>go('settings');
+$('#galleryMain').onclick=$('#galleryTile').onclick=$('#galleryScan').onclick=()=>$('#galleryInput').click();
+function saveHistory(text,type='text'){if(!text)return;const item={id:Date.now()+Math.random(),text,type,date:new Date().toISOString(),favorite:false};historyData.unshift(item);historyData=historyData.slice(0,100);persist();renderHistory()}
+function persist(){try{localStorage.setItem('verqcode-history',JSON.stringify(historyData))}catch{toast('Cihaz depolama alanına kaydedilemedi.')}}
+function classify(s){if(/^https?:\/\//i.test(s))return'Bağlantı';if(/^WIFI:/i.test(s))return'Wi-Fi';if(/^BEGIN:VCARD/i.test(s))return'Kişi kartı';if(/^mailto:/i.test(s))return'E-posta';if(/^tel:/i.test(s))return'Telefon';return'Metin'}
+function safeLink(s){try{const u=new URL(s);return ['http:','https:','mailto:','tel:'].includes(u.protocol)?u.href:null}catch{return null}}
+function showResult(text,save=true){if(!text){toast('QR kod içeriği boş.');return}stopCamera();if(vibrate&&navigator.vibrate)navigator.vibrate(45);const type=classify(text);if(save)saveHistory(text,type);$('#resultContent').innerHTML='';const wrap=document.createElement('div');const tag=document.createElement('span');tag.className='tag';tag.textContent=type;const body=document.createElement('div');body.className='result-box';body.textContent=text;wrap.append(tag,body);const buttons=document.createElement('div');buttons.className='row';const copy=document.createElement('button');copy.className='btn primary';copy.textContent='İçeriği kopyala';copy.onclick=()=>copyText(text);buttons.append(copy);
+const link=safeLink(text);if(link){const open=document.createElement('button');open.className='btn';open.textContent='Bağlantıyı aç';open.onclick=()=>{if(confirm('Bu bağlantıyı açmak istiyor musun?\\n\\n'+link))window.open(link,'_blank','noopener,noreferrer')};buttons.append(open)}
+wrap.append(buttons);const note=document.createElement('p');note.className='small muted';note.textContent='Güvenlik: QR içeriği otomatik açılmadı. Bilinmeyen bağlantıları açmadan önce kontrol et.';wrap.append(note);$('#resultContent').append(wrap);go('result')}
+async function copyText(text){try{await navigator.clipboard.writeText(text);toast('Kopyalandı ✓')}catch{const ta=document.createElement('textarea');ta.value=text;document.body.append(ta);ta.select();try{document.execCommand('copy');toast('Kopyalandı ✓')}catch{toast('Kopyalama desteklenmiyor.')}ta.remove()}}
+function renderHistory(){const box=$('#historyList');box.innerHTML='';if(!historyData.length){box.innerHTML='<div class="empty"><div class="big">◷</div><strong>Henüz geçmiş yok</strong><p>Taradığın QR kodları burada görünür.</p></div>';return}historyData.forEach(item=>{const row=document.createElement('div');row.className='history-item';const ico=document.createElement('div');ico.className='history-icon';ico.textContent=item.favorite?'★':'▦';const content=document.createElement('div');content.className='history-content';const title=document.createElement('strong');title.textContent=item.text;const date=document.createElement('small');date.textContent=(item.type||classify(item.text))+' · '+new Date(item.date).toLocaleString();const actions=document.createElement('div');actions.className='history-actions';const open=document.createElement('button');open.className='mini';open.textContent='Görüntüle';open.onclick=()=>showResult(item.text,false);const fav=document.createElement('button');fav.className='mini';fav.textContent=item.favorite?'★ Favori':'☆ Favori';fav.onclick=()=>{item.favorite=!item.favorite;persist();renderHistory()};const del=document.createElement('button');del.className='mini';del.textContent='Sil';del.onclick=()=>{historyData=historyData.filter(x=>x.id!==item.id);persist();renderHistory()};actions.append(open,fav,del);content.append(title,date,actions);row.append(ico,content);box.append(row)})}
+function clearHistory(){if(!historyData.length){toast('Geçmiş zaten boş.');return}if(confirm('Tüm tarama geçmişi silinsin mi?')){historyData=[];persist();renderHistory();toast('Geçmiş temizlendi.')}}
+$('#clearHistory').onclick=$('#clearHistory2').onclick=clearHistory;
+$('#darkToggle').onchange=e=>{dark=e.target.checked;document.documentElement.style.colorScheme=dark?'dark':'light';if(!dark){toast('Bu web sürümünde açık tema sınırlıdır.');e.target.checked=true;dark=true}};
+$('#vibrateToggle').onchange=e=>vibrate=e.target.checked;
+
+async function startCamera(){
+ if(!navigator.mediaDevices?.getUserMedia){toast('Kamera için HTTPS veya localhost ve desteklenen tarayıcı gerekir.');return}
+ try{
+  stopCamera();const wrap=$('#cameraWrap');wrap.innerHTML='';
+  const video=document.createElement('video');video.autoplay=true;video.muted=true;video.playsInline=true;wrap.append(video);
+  const frame=document.createElement('div');frame.className='scan-frame';wrap.append(frame);
+  stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:facing},width:{ideal:1280},height:{ideal:720}},audio:false});
+  video.srcObject=stream;await video.play();track=stream.getVideoTracks()[0];
+  if('BarcodeDetector'in window){try{detector=new BarcodeDetector({formats:['qr_code']})}catch{detector=null}}
+  let busy=false;const canvas=document.createElement('canvas'),ctx=canvas.getContext('2d',{willReadFrequently:true});
+  const loop=async()=>{if(!stream||video.readyState<2){scanLoop=requestAnimationFrame(loop);return}if(!busy){busy=true;try{let value='';if(detector){const codes=await detector.detect(video);if(codes.length)value=codes[0].rawValue}else if(window.jsQR){canvas.width=video.videoWidth;canvas.height=video.videoHeight;ctx.drawImage(video,0,0,canvas.width,canvas.height);const img=ctx.getImageData(0,0,canvas.width,canvas.height);const code=jsQR(img.data,img.width,img.height,{inversionAttempts:'dontInvert'});if(code)value=code.data}if(value){showResult(value);return}}catch(e){}finally{busy=false}}scanLoop=requestAnimationFrame(loop)};
+  scanLoop=requestAnimationFrame(loop);toast('Kamera hazır. QR kodu çerçeveye getir.');
+ }catch(err){stopCamera();$('#cameraWrap').innerHTML='<div class="empty"><div class="big">⚠</div><strong>Kamera açılamadı</strong><p>İzinleri kontrol et veya galeriden QR okutmayı dene.</p></div>';toast(err.name==='NotAllowedError'?'Kamera izni verilmedi.':'Kamera başlatılamadı.')}
+}
+function stopCamera(){if(scanLoop)cancelAnimationFrame(scanLoop);scanLoop=null;if(stream)stream.getTracks().forEach(t=>t.stop());stream=null;track=null;detector=null;flashOn=false}
+$('#startCamera').onclick=startCamera;$('#stopCamera').onclick=()=>{stopCamera();$('#cameraWrap').innerHTML='<div class="empty"><div class="big">▦</div><div>Kamera durduruldu</div></div>';toast('Tarama durduruldu.')};
+$('#switchCamera').onclick=()=>{facing=facing==='environment'?'user':'environment';if(stream)startCamera();else toast('Kamera yönü: '+(facing==='environment'?'arka':'ön'))};
+$('#toggleFlash').onclick=async()=>{if(!track){toast('Önce kamerayı başlat.');return}try{const cap=track.getCapabilities();if(!cap.torch){toast('Bu kamera flaş kontrolünü desteklemiyor.');return}flashOn=!flashOn;await track.applyConstraints({advanced:[{torch:flashOn}]});toast(flashOn?'Flaş açıldı':'Flaş kapatıldı')}catch{toast('Flaş değiştirilemedi.')}};
+document.addEventListener('visibilitychange',()=>{if(document.hidden)stopCamera()});
+$('#galleryInput').addEventListener('change',async e=>{const file=e.target.files?.[0];if(!file)return;try{const url=URL.createObjectURL(file);const img=new Image();img.onload=()=>{try{const c=document.createElement('canvas'),ctx=c.getContext('2d',{willReadFrequently:true});const scale=Math.min(1,1600/Math.max(img.width,img.height));c.width=Math.round(img.width*scale);c.height=Math.round(img.height*scale);ctx.drawImage(img,0,0,c.width,c.height);let code=null;if('BarcodeDetector'in window){new BarcodeDetector({formats:['qr_code']}).detect(c).then(codes=>{URL.revokeObjectURL(url);if(codes.length)showResult(codes[0].rawValue);else decodeFallback(c,ctx)}).catch(()=>decodeFallback(c,ctx));return}decodeFallback(c,ctx);function decodeFallback(canvas,context){if(window.jsQR){const d=context.getImageData(0,0,canvas.width,canvas.height);code=jsQR(d.data,d.width,d.height,{inversionAttempts:'attemptBoth'})}URL.revokeObjectURL(url);if(code)showResult(code.data);else toast('Görselde QR kod bulunamadı. Daha net bir görsel dene.')}}catch{URL.revokeObjectURL(url);toast('Görsel işlenemedi.')}};img.onerror=()=>{URL.revokeObjectURL(url);toast('Görsel açılamadı.')};img.src=url}catch{toast('Görsel seçilemedi.')}e.target.value=''});
+function renderFields(){const f=$('#fields');f.innerHTML='';const configs={url:[['value','Web sitesi bağlantısı','https://example.com']],text:[['value','Metin','QR içine yazılacak metin']],phone:[['value','Telefon numarası','+994...']],email:[['value','E-posta adresi','name@example.com'],['subject','Konu (isteğe bağlı)','Merhaba']],wifi:[['ssid','Wi-Fi ağ adı (SSID)','Ağ adı'],['password','Wi-Fi şifresi','Şifre'],['security','Güvenlik','WPA']],vcard:[['name','Ad soyad','Ad Soyad'],['phone','Telefon','+994...'],['email','E-posta','name@example.com']]};
+(configs[currentType]||configs.url).forEach(([id,label,placeholder])=>{const l=document.createElement('label');l.textContent=label;l.htmlFor='field-'+id;const input=(id==='value'&&currentType==='text')?document.createElement('textarea'):document.createElement('input');input.id='field-'+id;input.placeholder=placeholder;if(id==='password')input.type='password';if(id==='security'){const sel=document.createElement('select');['WPA','WEP','nopass'].forEach(x=>{const o=document.createElement('option');o.value=x;o.textContent=x;sel.append(o)});sel.id=input.id;f.append(l,sel);return}f.append(l,input)});
+const update=()=>{try{const val=getPayload();if(val){currentQR=val;generateQR(val)}else{$('#qrPreview').innerHTML='<span class="muted">İçeriği girerek önizleme oluştur</span>';currentQR=''}}catch{}};
+f.querySelectorAll('input,textarea,select').forEach(el=>el.addEventListener('input',update));update()}
+function val(id){return $('#field-'+id)?.value.trim()||''}
+function getPayload(){let s='';switch(currentType){case'url':s=val('value');if(s&&!/^https?:\/\//i.test(s))s='https://'+s;break;case'text':s=val('value');break;case'phone':s=val('value');if(s)s='tel:'+s;break;case'email':s=val('value');if(s&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s))throw Error('Geçerli bir e-posta adresi gir.');if(s)s='mailto:'+s+(val('subject')?'?subject='+encodeURIComponent(val('subject')):'');break;case'wifi':if(val('ssid'))s=`WIFI:T:${$('#field-security').value};S:${val('ssid')};P:${val('password').replace(/[\\;,":]/g,'\\$&')};;`;break;case'vcard':if(val('name'))s=`BEGIN:VCARD\nVERSION:3.0\nFN:${val('name')}\n${val('phone')?'TEL:'+val('phone')+'\n':''}${val('email')?'EMAIL:'+val('email')+'\n':''}END:VCARD`;break}return s}
+function generateQR(text){const color=$('#qrColor').value,bg=$('#bgColor').value;$('#qrPreview').innerHTML='';if(!window.QRCode){$('#qrPreview').textContent='QR kütüphanesi yüklenemedi. İnternet bağlantısını kontrol et.';return}QRCode.toDataURL(text,{width:440,margin:2,errorCorrectionLevel:'M',color:{dark:color,light:bg}},(err,url)=>{if(err){$('#qrPreview').textContent='Bu içerik için QR oluşturulamadı.';return}currentDataURL=url;const img=document.createElement('img');img.src=url;img.alt='Oluşturulan QR kod';$('#qrPreview').replaceChildren(img)})}
+$$('#typePills .pill').forEach(b=>b.onclick=()=>{$$('#typePills .pill').forEach(x=>x.classList.toggle('active',x===b));currentType=b.dataset.type;renderFields()});
+$('#qrColor').oninput=$('#bgColor').oninput=()=>{if(currentQR)generateQR(currentQR)};
+$('#downloadQR').onclick=()=>{if(!currentDataURL){toast('Önce QR içeriğini gir.');return}const a=document.createElement('a');a.href=currentDataURL;a.download='verqcode.png';a.click();toast('PNG kaydediliyor…')};
+$('#shareQR').onclick=async()=>{if(!currentDataURL){toast('Önce QR oluştur.');return}try{const blob=await(await fetch(currentDataURL)).blob();const file=new File([blob],'verqcode.png',{type:'image/png'});if(navigator.canShare?.({files:[file]})){await navigator.share({files:[file],title:'VerqCode QR'});}else{await copyText(currentQR);toast('Paylaşım desteklenmiyor; içerik kopyalandı.')}}catch(e){if(e.name!=='AbortError')toast('Paylaşım tamamlanamadı.')}};
+document.addEventListener('keydown',e=>{if(e.key==='Escape')stopCamera()});
+renderFields();renderHistory();
+})();
+</script>
+</body>
+</html>
